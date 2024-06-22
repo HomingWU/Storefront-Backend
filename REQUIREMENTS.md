@@ -5,38 +5,38 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index 
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+- Index '/products' [GET] 
+- Show '/products/:id' [GET]
+- Create [token required] '/cats' [POST]
+- [OPTIONAL] Top 5 most popular products 'products/top' [GET]
+- [OPTIONAL] Products by category (args: product category) '/products/category/:category' [GET]
 
 #### Users
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required] '/users' [GET]
+- Show [token required] '/users/:id' [GET]
+- Create N[token required] '/users' [POST]
 
 #### Orders
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Current Order by user (args: user id)[token required] '/orders/:userId' [GET]
+- [OPTIONAL] Completed Orders by user (args: user id)[token required] '/orders/completed/:userId' [GET]
 
 ## Data Shapes
 #### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+-  id SERIAL PRIMARY KEY    
+- name VARCHAR NOT NULL
+- price NUMERIC NOT NULL
+- [OPTIONAL] category VARCHAR(50)
 
 #### User
-- id
-- firstName
-- lastName
-- password
+- id SERIAL PRIMARY KEY
+- firstName VARCHAR(100) NOT NULL
+- lastName VARCHAR(100) NOT NULL
+- password VARCHAR(100) NOT NULL
 
 #### Orders
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
+- id SERIAL PRIMARY KEY
+- id of each product in the order INTEGER [foreign key to Product table]
+- quantity of each product in the order INTEGER NOT NULL
+- user_id INTEGER [foreign key to User table]
+- status of order (active or complete) VARCHAR(10) NOT NULL
 
