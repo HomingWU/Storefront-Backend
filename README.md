@@ -52,3 +52,19 @@ Add JWT functionality as shown in the course. Make sure that JWTs are required f
 Before submitting, make sure that your project is complete with a `README.md`. Your `README.md` must include instructions for setting up and running your project including how you setup, run, and connect to your database. 
 
 Before submitting your project, spin it up and test each endpoint. If each one responds with data that matches the data shapes from the `REQUIREMENTS.md`, it is ready for submission!
+
+### 7. Run the backend
+
+1. Install Postgres and make sure CLI is also installed.
+2. Connect to postgres using CLI comman: ```psql -U postgres``` and if necessary input your password.
+3. Create database: <br>```CREATE DATABASE store;```<br>
+```CREATE DATABASE store_test;```
+4. Create user and grant privileges:<br>
+```CREATE USER store_admin WITH PASSWORD 'password1234';```<br>
+```GRANT ALL PRIVILEGES ON DATABASE "store" to store_admin;```<br>
+```GRANT ALL PRIVILEGES ON DATABASE "store_test" to store_admin;```
+5. Grant SCHEMA public to user:<br>
+Using the postgres super user to connect to 'store' database: ```\c store```, then run: <br>
+```GRANT ALL ON SCHEMA public TO store_admin;```<br>
+Follow the same step to grant SCHEMA public of 'store_test' to store_admin: ```\c store_test```, then run: <br>
+```GRANT ALL ON SCHEMA public TO store_admin;```
