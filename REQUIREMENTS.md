@@ -6,17 +6,23 @@ These are the notes from a meeting with the frontend developer that describe wha
 ## API Endpoints
 #### Products
 - Index '/products' [GET] 
-- Show '/products/:id' [GET]
+- Show (args: product id) '/products/:id' [GET]
 - Create [token required] '/products' [POST]
+- Delete (args: product id) [token required] '/products/:id' [DELETE]
 - [OPTIONAL] Top 5 most popular products 'products/top' [GET]
 - [OPTIONAL] Products by category (args: product category) '/products/category/:category' [GET]
 
 #### Users
 - Index [token required] '/users' [GET]
-- Show [token required] '/users/:id' [GET]
+- Show (args: user id) [token required] '/users/:id' [GET]
 - Create [token required] '/users' [POST]
+- Delete (args: user id) [token required] '/users/:id' [DELETE]
 
 #### Orders
+- Index [token required] '/orders' [GET]
+- Show (args: order id) [token required] '/orders/:id' [GET]
+- Create [token required] '/orders' [POST]
+- Delete (args: order id) [token required] '/orders/:id' [DELETE]
 - Current Order by user (args: user id)[token required] '/orders/active/:userId' [GET]
 - [OPTIONAL] Completed Orders by user (args: user id)[token required] '/orders/complete/:userId' [GET]
 - Add Products (args: user id, order id)[token required] '/users/:userId/orders/:orderId/products' [POST]

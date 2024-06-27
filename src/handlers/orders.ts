@@ -26,8 +26,8 @@ const completedOrdersByUser = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
     const order: Order = {
         id: 0,
-        user_id: 1,
-        status: 'active'
+        user_id: req.body.user_id,
+        status: req.body.status
     }
 
     try {
@@ -39,11 +39,36 @@ const create = async (req: Request, res: Response) => {
     }
 }
 
+const destroy = async (req: Request, res: Response) => {
+    const deleted = await store.delete(req.params.id)
+    res.json(deleted)
+}
+
+const addProduct = async (req: Request, res: Response) => {
+
+    const userId: string = req.params.user_id
+    const orderId: string = req.params.id
+    const productId: string = req.body.product_id
+    const quantity: number = req.body.quantity
+
+    try {
+        const order = await store.addProduct(quantity, userId, orderId, productId)
+        res.json(order)
+    } catch (err) {
+        res.status(400)
+        res.json(err)
+    }
+
+}
+
 const order_routes = (app: express.Application) => {
     app.get('/orders', index)
     app.get('/orders/:id', show)
     app.get('/orders/users/:user_id/current', currentOrderByUser)
     app.get('/orders/users/:user_id/completed', completedOrdersByUser)
+    app.post('/orders', create)
+    app.delete('/orders/:id', destroy)
+    app.post('/orders/users/:user_id/:id/products', addProduct)
 }
 
 export default order_routes
