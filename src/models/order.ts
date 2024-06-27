@@ -67,6 +67,49 @@ export class OrderStore {
         }
     }
 
+    async addProduct(quantity: number, userId: string, orderId: string, productId: string): Promise<Order> {
+
+        // get order to see if it is active and belongs to user
+        try {
+            const ordersql = 'SELECT * FROM orders WHERE id=($1)'
+
+            const conn = await Client.connect()
+
+            const result = await conn.query(ordersql, [orderId])
+
+            const order = result.rows[0]
+
+            if (order.status !== "active") {
+                throw new Error(`Could not add product ${productId} to order ${orderId} because order status is ${order.status}`)
+            }
+
+            if (order.user_id !== parseInt(userId)) {
+                throw new Error(`Could not add product ${productId} to order ${orderId} because order does not belong to user ${userId}`)
+            }
+
+            conn.release()
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+
+        try {
+            const sql = 'INSERT INTO order_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *'
+
+            const conn = await Client.connect()
+
+            const result = await conn
+                .query(sql, [quantity, orderId, productId])
+
+            const order = result.rows[0]
+
+            conn.release()
+
+            return order
+        } catch (err) {
+            throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`)
+        }
+    }
+
     async create(o: Order): Promise<Order> {
         try {
             const conn = await Client.connect()
