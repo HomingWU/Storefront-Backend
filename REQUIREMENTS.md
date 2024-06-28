@@ -9,6 +9,7 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Show (args: product id) '/products/:id' [GET]
 - Create [token required] '/products' [POST]
 - Delete (args: product id) [token required] '/products/:id' [DELETE]
+- Update (args: product id) [token required] 'products/:id' [PUT]
 - [OPTIONAL] Top 5 most popular products 'products/top' [GET]
 - [OPTIONAL] Products by category (args: product category) '/products/category/:category' [GET]
 
@@ -17,11 +18,13 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Show (args: user id) [token required] '/users/:id' [GET]
 - Create [token required] '/users' [POST]
 - Delete (args: user id) [token required] '/users/:id' [DELETE]
+- Update (args: user id) [token required] '/users/:id' [PUT]
 
 #### Orders
 - Index [token required] '/orders' [GET]
 - Show (args: order id) [token required] '/orders/:id' [GET]
 - Create [token required] '/orders' [POST]
+- Update [token required] 'orders/:id' [PUT]
 - Delete (args: order id) [token required] '/orders/:id' [DELETE]
 - Current Order by user (args: user id)[token required] '/orders/active/:userId' [GET]
 - [OPTIONAL] Completed Orders by user (args: user id)[token required] '/orders/complete/:userId' [GET]

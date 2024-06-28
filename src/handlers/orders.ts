@@ -39,6 +39,22 @@ const create = async (req: Request, res: Response) => {
     }
 }
 
+const update = async (req: Request, res: Response) => {
+    const order: Order = {
+        id: parseInt(req.params.id),
+        user_id: req.body.user_id,
+        status: req.body.status
+    }
+
+    try {
+        const updated = await store.update(order)
+        res.json(updated)
+    } catch (err) {
+        res.status(400)
+        res.json(err)
+    }
+}
+
 const destroy = async (req: Request, res: Response) => {
     const deleted = await store.delete(req.params.id)
     res.json(deleted)
@@ -69,6 +85,7 @@ const order_routes = (app: express.Application) => {
     app.post('/orders', create)
     app.delete('/orders/:id', destroy)
     app.post('/orders/users/:user_id/:id/products', addProduct)
+    app.put('/orders/:id', update)
 }
 
 export default order_routes

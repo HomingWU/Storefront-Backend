@@ -40,12 +40,30 @@ const destroy = async (req: Request, res: Response) => {
     res.json(deleted)
 }
 
+const update = async (req: Request, res: Response) => {
+    const product: Product = {
+        id: parseInt(req.params.id),
+        name: req.body.name,
+        price: req.body.price,
+        catagory: req.body.catagory
+    }
+
+    try {
+        const updated = await store.update(product)
+        res.json(updated)
+    } catch (err) {
+        res.status(400)
+        res.json(err)
+    }
+}
+
 const product_routes = (app: express.Application) => {
     app.get('/products', index)
     app.get('/products/:id', show)
     app.get('/products/catagory/:catagory', showByCatagory)
     app.post('/products', create)
     app.delete('/products/:id', destroy)
+    app.put('/products/:id', update)
 }
 
 export default product_routes

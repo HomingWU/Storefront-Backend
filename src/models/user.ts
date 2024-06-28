@@ -67,4 +67,19 @@ export class UserStore {
             throw new Error(`Cannot delete user: ${err}`)
         }
     }
+
+    async update(u: User): Promise<User> {
+        try {
+            const conn = await Client.connect()
+            const sql = 'UPDATE users SET firstName = $1, lastName = $2, password = $3 WHERE id = $4 RETURNING *'
+
+            const result = await conn.query(sql, [u.firstName, u.lastName, u.password, u.id])
+
+            conn.release()
+
+            return result.rows[0]
+        } catch (err) {
+            throw new Error(`Cannot update user: ${err}`)
+        }
+    }
 }

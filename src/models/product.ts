@@ -82,4 +82,19 @@ export class ProductStore {
             throw new Error(`Cannot delete product: ${err}`)
         }
     }
+
+    async update(p: Product): Promise<Product> {
+        try {
+            const conn = await Client.connect()
+            const sql = 'UPDATE products SET name = $1, price = $2, catagory = $3 WHERE id = $4 RETURNING *'
+
+            const result = await conn.query(sql, [p.name, p.price, p.catagory, p.id])
+
+            conn.release()
+
+            return result.rows[0]
+        } catch (err) {
+            throw new Error(`Cannot update product: ${err}`)
+        }
+    }
 }
