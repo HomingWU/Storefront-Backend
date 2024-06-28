@@ -83,7 +83,7 @@ export class OrderStore {
                 throw new Error(`Could not add product ${productId} to order ${orderId} because order status is ${order.status}`)
             }
 
-            if (order.user_id !== parseInt(userId)) {
+            if (order.user_id !== userId) {
                 throw new Error(`Could not add product ${productId} to order ${orderId} because order does not belong to user ${userId}`)
             }
 

@@ -63,7 +63,7 @@ const destroy = async (req: Request, res: Response) => {
 const addProduct = async (req: Request, res: Response) => {
 
     const userId: string = req.params.user_id
-    const orderId: string = req.params.id
+    const orderId: string = req.params.order_id
     const productId: string = req.body.product_id
     const quantity: number = req.body.quantity
 
@@ -84,7 +84,7 @@ const order_routes = (app: express.Application) => {
     app.get('/orders/complete/:user_id', completedOrdersByUser)
     app.post('/orders', create)
     app.delete('/orders/:id', destroy)
-    app.post('/orders/users/:user_id/:id/products', addProduct)
+    app.post('/users/:user_id/orders/:order_id/products', addProduct)
     app.put('/orders/:id', update)
 }
 
