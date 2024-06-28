@@ -13,8 +13,8 @@ const show = async (req: Request, res: Response) => {
     res.json(product)
 }
 
-const showByCatagory = async (req: Request, res: Response) => {
-    const product = await store.showByCatagory(req.params.catagory)
+const showByCategory = async (req: Request, res: Response) => {
+    const product = await store.showByCategory(req.params.category)
     res.json(product)
 }
 
@@ -23,7 +23,7 @@ const create = async (req: Request, res: Response) => {
         id: 0,
         name: req.body.name,
         price: req.body.price,
-        catagory: req.body.catagory
+        category: req.body.category
     }
 
     try {
@@ -45,7 +45,7 @@ const update = async (req: Request, res: Response) => {
         id: parseInt(req.params.id),
         name: req.body.name,
         price: req.body.price,
-        catagory: req.body.catagory
+        category: req.body.category
     }
 
     try {
@@ -60,7 +60,7 @@ const update = async (req: Request, res: Response) => {
 const product_routes = (app: express.Application) => {
     app.get('/products', index)
     app.get('/products/:id', show)
-    app.get('/products/catagory/:catagory', showByCatagory)
+    app.get('/products/category/:category', showByCategory)
     app.post('/products', create)
     app.delete('/products/:id', destroy)
     app.put('/products/:id', update)

@@ -4,7 +4,7 @@ export type Product = {
     id: number;
     name: string;
     price: number;
-    catagory: string;
+    category: string;
 }
 
 export class ProductStore {
@@ -38,12 +38,12 @@ export class ProductStore {
         }
     }
 
-    async showByCatagory(catagory: string): Promise<Product[]> {
+    async showByCategory(category: string): Promise<Product[]> {
         try {
             const conn = await Client.connect()
-            const sql = 'SELECT * FROM products WHERE catagory=($1)'
+            const sql = 'SELECT * FROM products WHERE category=($1)'
 
-            const result = await conn.query(sql, [catagory])
+            const result = await conn.query(sql, [category])
 
             conn.release()
 
@@ -56,9 +56,9 @@ export class ProductStore {
     async create(p: Product): Promise<Product> {
         try {
             const conn = await Client.connect()
-            const sql = 'INSERT INTO products (name, price, catagory) VALUES($1, $2, $3) RETURNING *'
+            const sql = 'INSERT INTO products (name, price, category) VALUES($1, $2, $3) RETURNING *'
 
-            const result = await conn.query(sql, [p.name, p.price, p.catagory])
+            const result = await conn.query(sql, [p.name, p.price, p.category])
 
             conn.release()
 
@@ -86,9 +86,9 @@ export class ProductStore {
     async update(p: Product): Promise<Product> {
         try {
             const conn = await Client.connect()
-            const sql = 'UPDATE products SET name = $1, price = $2, catagory = $3 WHERE id = $4 RETURNING *'
+            const sql = 'UPDATE products SET name = $1, price = $2, category = $3 WHERE id = $4 RETURNING *'
 
-            const result = await conn.query(sql, [p.name, p.price, p.catagory, p.id])
+            const result = await conn.query(sql, [p.name, p.price, p.category, p.id])
 
             conn.release()
 
