@@ -47,7 +47,7 @@ const user_routes = (app: express.Application) => {
     app.get('/users/:id', show)
     app.post('/users', create)
     app.delete('/users/:id', destroy)
-    app.put('/users', update)
+    app.put('/users/:id', update)
 }
 
 export default user_routes
