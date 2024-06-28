@@ -80,8 +80,8 @@ const addProduct = async (req: Request, res: Response) => {
 const order_routes = (app: express.Application) => {
     app.get('/orders', index)
     app.get('/orders/:id', show)
-    app.get('/orders/users/:user_id/current', currentOrderByUser)
-    app.get('/orders/users/:user_id/completed', completedOrdersByUser)
+    app.get('/orders/active/:user_id', currentOrderByUser)
+    app.get('/orders/complete/:user_id', completedOrdersByUser)
     app.post('/orders', create)
     app.delete('/orders/:id', destroy)
     app.post('/orders/users/:user_id/:id/products', addProduct)
