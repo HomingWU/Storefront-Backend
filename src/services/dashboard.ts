@@ -16,5 +16,4 @@ export class DashboardQueries {
       throw new Error(`unable get products and orders: ${err}`)
     } 
   }
-
 }

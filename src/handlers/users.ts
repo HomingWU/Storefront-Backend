@@ -1,7 +1,10 @@
 import express, { Request, Response } from 'express'
 import { User, UserStore } from '../models/user'
+import { verifyAuthToken, verifyUser, verifyUserInBody } from '../middleware/authMiddleware'
+import jwt from 'jsonwebtoken'
 
 const store = new UserStore()
+const secret = process.env.TOKEN_SECRET as string
 
 const index = async (_req: Request, res: Response) => {
     const users = await store.index()
@@ -14,15 +17,32 @@ const show = async (req: Request, res: Response) => {
 }
 
 const create = async (req: Request, res: Response) => {
-    const user: User = {
-        id: 0,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        password: req.body.password
-    }
+  const user: User = {
+    id: 0,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    password: req.body.password,
+  };
+  try {
+    const newUser = await store.create(user);
+    const token = jwt.sign({ user: newUser }, secret);
+    res.json({token, user: newUser});
+  } catch (err) {
+    const error = err as Error
+    res.status(400)
+    res.json(error.message)
+  }
+};
 
-    const newUser = await store.create(user)
-    res.json(newUser)
+const authenticate = async (req: Request, res: Response) => {
+    const user = await store.authenticate(req.body.firstName, req.body.lastName, req.body.password)
+    if (user) {
+        const token = jwt.sign({ user: user }, secret);
+        res.json({token, user: user})
+    } else {
+        res.status(401)
+        res.json({ error: 'unauthorized' })
+    }
 }
 
 const destroy = async (req: Request, res: Response) => {
@@ -43,11 +63,12 @@ const update = async (req: Request, res: Response) => {
 }
 
 const user_routes = (app: express.Application) => {
-    app.get('/users', index)
-    app.get('/users/:id', show)
+    app.get('/users', verifyAuthToken, index)
+    app.get('/users/:id', verifyAuthToken, show)
     app.post('/users', create)
-    app.delete('/users/:id', destroy)
-    app.put('/users/:id', update)
+    app.delete('/users/:id', verifyUser, destroy)
+    app.put('/users/:id', verifyUser, update)
+    app.post('/users/authenticate', authenticate)
 }
 
 export default user_routes

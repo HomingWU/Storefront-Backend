@@ -5,20 +5,21 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 #### Products
-- Index '/products' [GET] 
+- Index '/products' [GET]
 - Show (args: product id) '/products/:id' [GET]
 - Create [token required] '/products' [POST]
 - Delete (args: product id) [token required] '/products/:id' [DELETE]
-- Update (args: product id) [token required] 'products/:id' [PUT]
-- [OPTIONAL] Top 5 most popular products 'products/top' [GET]
+- Update (args: product id) [token required] '/products/:id' [PUT]
+- [OPTIONAL] Top 5 most popular products '/dashboard/top5products' [GET]
 - [OPTIONAL] Products by category (args: product category) '/products/category/:category' [GET]
 
 #### Users
 - Index [token required] '/users' [GET]
 - Show (args: user id) [token required] '/users/:id' [GET]
-- Create [token required] '/users' [POST]
+- Create [token returned] '/users' [POST]
 - Delete (args: user id) [token required] '/users/:id' [DELETE]
 - Update (args: user id) [token required] '/users/:id' [PUT]
+- Authenticate [tokken returned]'/users/authenticate' [POST]
 
 #### Orders
 - Index [token required] '/orders' [GET]

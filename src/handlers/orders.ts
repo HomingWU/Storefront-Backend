@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import { Order, OrderStore } from '../models/order'
+import { verifyAuthToken, verifyUser, verifyUserInBody } from '../middleware/authMiddleware'
 
 const store = new OrderStore()
 
@@ -34,8 +35,9 @@ const create = async (req: Request, res: Response) => {
         const newOrder = await store.create(order)
         res.json(newOrder)
     } catch (err) {
+        const error = err as Error
         res.status(400)
-        res.json(err)
+        res.json(error.message)
     }
 }
 
@@ -50,8 +52,9 @@ const update = async (req: Request, res: Response) => {
         const updated = await store.update(order)
         res.json(updated)
     } catch (err) {
+        const error = err as Error
         res.status(400)
-        res.json(err)
+        res.json(error.message)
     }
 }
 
@@ -71,21 +74,22 @@ const addProduct = async (req: Request, res: Response) => {
         const order = await store.addProduct(quantity, userId, orderId, productId)
         res.json(order)
     } catch (err) {
+        const error = err as Error
         res.status(400)
-        res.json(err)
+        res.json(error.message)
     }
 
 }
 
 const order_routes = (app: express.Application) => {
-    app.get('/orders', index)
-    app.get('/orders/:id', show)
-    app.get('/orders/active/:user_id', currentOrderByUser)
-    app.get('/orders/complete/:user_id', completedOrdersByUser)
-    app.post('/orders', create)
-    app.delete('/orders/:id', destroy)
-    app.post('/users/:user_id/orders/:order_id/products', addProduct)
-    app.put('/orders/:id', update)
+    app.get('/orders', verifyAuthToken, index)
+    app.get('/orders/:id', verifyAuthToken, show)
+    app.get('/orders/active/:user_id', verifyUser, currentOrderByUser)
+    app.get('/orders/complete/:user_id', verifyUser, completedOrdersByUser)
+    app.post('/orders', verifyUserInBody, create)
+    app.delete('/orders/:id', verifyUserInBody, destroy)
+    app.post('/users/:user_id/orders/:order_id/products', verifyUser, addProduct)
+    app.put('/orders/:id', verifyUserInBody, update)
 }
 
 export default order_routes

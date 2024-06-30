@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import { Product, ProductStore } from '../models/product'
+import { verifyAuthToken } from '../middleware/authMiddleware'
 
 const store = new ProductStore()
 
@@ -30,8 +31,9 @@ const create = async (req: Request, res: Response) => {
         const newProduct = await store.create(product)
         res.json(newProduct)
     } catch (err) {
+        const error = err as Error
         res.status(400)
-        res.json(err)
+        res.json(error.message)
     }
 }
 
@@ -52,8 +54,9 @@ const update = async (req: Request, res: Response) => {
         const updated = await store.update(product)
         res.json(updated)
     } catch (err) {
+        const error = err as Error
         res.status(400)
-        res.json(err)
+        res.json(error.message)
     }
 }
 
@@ -61,9 +64,9 @@ const product_routes = (app: express.Application) => {
     app.get('/products', index)
     app.get('/products/:id', show)
     app.get('/products/category/:category', showByCategory)
-    app.post('/products', create)
-    app.delete('/products/:id', destroy)
-    app.put('/products/:id', update)
+    app.post('/products', verifyAuthToken, create)
+    app.delete('/products/:id', verifyAuthToken, destroy)
+    app.put('/products/:id', verifyAuthToken, update)
 }
 
 export default product_routes

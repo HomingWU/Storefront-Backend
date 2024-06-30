@@ -44,9 +44,20 @@ export class OrderStore {
 
             const result = await conn.query(sql, [user_id])
 
+            const orders : Order[] = await Promise.all(result.rows.map(async (order: Order) => {
+                const productsSql = 'SELECT product_id, SUM(quantity) AS quantity FROM order_products WHERE order_id=($1) GROUP BY product_id'
+                const productsResult = await conn.query(productsSql, [order.id])
+                return {
+                    id: order.id,
+                    user_id: order.user_id,
+                    status: order.status,
+                    products: productsResult.rows
+                }
+            }))
+
             conn.release()
 
-            return result.rows
+            return orders
         } catch (err) {
             throw new Error(`Could not find order for user ${user_id}. Error: ${err}`)
         }
@@ -59,9 +70,20 @@ export class OrderStore {
 
             const result = await conn.query(sql, [user_id])
 
+            const orders : Order[] = await Promise.all(result.rows.map(async (order: Order) => {
+                const productsSql = 'SELECT product_id, SUM(quantity) AS quantity FROM order_products WHERE order_id=($1) GROUP BY product_id'
+                const productsResult = await conn.query(productsSql, [order.id])
+                return {
+                    id: order.id,
+                    user_id: order.user_id,
+                    status: order.status,
+                    products: productsResult.rows
+                }
+            }))
+
             conn.release()
 
-            return result.rows
+            return orders
         } catch (err) {
             throw new Error(`Could not find order for user ${user_id}. Error: ${err}`)
         }
