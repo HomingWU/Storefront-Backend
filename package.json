@@ -6,11 +6,12 @@
   "scripts": {
     "start": "node src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "ENV=test && npx tsc && db-migrate --env test up && jasmine && db-migrate db:drop test",
+    "test": "db-migrate --env test up && npx tsc && cross-env ENV=test jasmine && db-migrate --env test reset",
+    "db-reset": "db-migrate --env test reset",
     "tsc": "tsc",
     "jasmine": "jasmine"
   },
-  "author": "Udacity",
+  "author": "Haoming Wu",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -22,6 +23,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.5.1",
+    "supertest": "^7.0.0",
     "typescript": "^4.1.3"
   },
   "devDependencies": {
@@ -31,7 +33,9 @@
     "@types/jasmine": "^3.10.18",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/pg": "^7.14.7",
-    "jasmine": "^3.99.0",
+    "@types/supertest": "^6.0.2",
+    "cross-env": "^7.0.3",
+    "jasmine": "^5.1.0",
     "jasmine-spec-reporter": "^6.0.0",
     "jasmine-ts": "^0.3.0",
     "ts-node": "^9.1.1",
