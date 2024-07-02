@@ -1,7 +1,7 @@
 import Client from '../database'
 
 export class DashboardQueries {
-  // Get top 5 most popular products
+  // Get top 5 most popular products (popular = appearing in most orders, not quantity sold)
   async top5Products(): Promise<{name: string, price: number}[]> {
     try {
       const conn = await Client.connect()
