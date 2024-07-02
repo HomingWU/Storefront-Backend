@@ -1,4 +1,5 @@
 import {Product, ProductStore} from '../../models/product'
+import Client from '../../database'
 
 const store = new ProductStore()
 
@@ -25,10 +26,9 @@ describe('Product Model', () => {
     })
 
     afterAll(async() => {
-        await store.delete('2')
-        await store.delete('3')
-        await store.delete('4')
-        console.log("Product number after test: " + (await store.index()).length)
+        const conn = await Client.connect()
+        await conn.query('TRUNCATE ONLY products RESTART IDENTITY CASCADE;')
+        conn.release
     })
 
     it('should have an index method', () => {

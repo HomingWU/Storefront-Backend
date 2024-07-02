@@ -1,5 +1,6 @@
 import {User, UserStore} from '../../models/user';
 import bcrypt from 'bcrypt'
+import Client from '../../database'
 
 const store = new UserStore()
 
@@ -30,10 +31,9 @@ describe('User Model', () => {
     })
 
     afterAll(async() => {
-        await store.delete('2')
-        await store.delete('3')
-        await store.delete('4')
-        console.log("User number after test: " + (await store.index()).length)
+        const conn = await Client.connect()
+        await conn.query('TRUNCATE ONLY users RESTART IDENTITY CASCADE;')
+        conn.release
     })
 
     it('should have an index method', () => {

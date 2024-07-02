@@ -5,6 +5,12 @@ export type Order = {
     user_id: number;
     status: string;
 }
+export type OrderProduct = {
+    id: number;
+    quantity: number;
+    order_id: number;
+    product_id: number;
+}
 
 export class OrderStore {
     async index(): Promise<Order[]> {
@@ -16,7 +22,12 @@ export class OrderStore {
 
             conn.release()
 
-            return result.rows
+            const orders = result.rows.map((row: any) => {
+                row.user_id = parseInt(row.user_id);
+                return row;
+            });
+
+            return orders
         } catch (err) {
             throw new Error(`Could not get orders. Error: ${err}`)
         }
@@ -30,6 +41,8 @@ export class OrderStore {
             const result = await conn.query(sql, [id])
 
             conn.release()
+
+            result.rows[0].user_id = parseInt(result.rows[0].user_id)
 
             return result.rows[0]
         } catch (err) {
@@ -49,7 +62,7 @@ export class OrderStore {
                 const productsResult = await conn.query(productsSql, [order.id])
                 return {
                     id: order.id,
-                    user_id: order.user_id,
+                    user_id: parseInt(order.user_id as unknown as string),
                     status: order.status,
                     products: productsResult.rows
                 }
@@ -89,7 +102,7 @@ export class OrderStore {
         }
     }
 
-    async addProduct(quantity: number, userId: string, orderId: string, productId: string): Promise<Order> {
+    async addProduct(quantity: number, userId: string, orderId: string, productId: string): Promise<OrderProduct> {
 
         // get order to see if it is active and belongs to user
         try {
@@ -123,6 +136,8 @@ export class OrderStore {
                 .query(sql, [quantity, orderId, productId])
 
             const order = result.rows[0]
+            result.rows[0].order_id = parseInt(result.rows[0].order_id)
+            result.rows[0].product_id = parseInt(result.rows[0].product_id)
 
             conn.release()
 
@@ -140,6 +155,7 @@ export class OrderStore {
             const result = await conn.query(sql, [o.user_id, o.status])
 
             conn.release()
+            result.rows[0].user_id = parseInt(result.rows[0].user_id)
 
             return result.rows[0]
         } catch (err) {
@@ -155,7 +171,8 @@ export class OrderStore {
             const result = await conn.query(sql, [o.user_id, o.status, o.id])
 
             conn.release()
-
+            result.rows[0].user_id = parseInt(result.rows[0].user_id)
+            
             return result.rows[0]
         } catch (err) {
             throw new Error(`Could not update order ${o.id}. Error: ${err}`)
@@ -165,13 +182,16 @@ export class OrderStore {
     async delete(id: string): Promise<Order> {
         try {
             const conn = await Client.connect()
-            const sql = 'DELETE FROM orders WHERE id=($1) RETURNING *'
+            const sql1 = 'DELETE FROM order_products WHERE order_id=($1)'
+            const sql2 = 'DELETE FROM orders WHERE id=($1) RETURNING *'
 
-            const result = await conn.query(sql, [id])
+            const result1 = await conn.query(sql1, [id])
+            const result2 = await conn.query(sql2, [id])
 
             conn.release()
+            result2.rows[0].user_id = parseInt(result2.rows[0].user_id)
 
-            return result.rows[0]
+            return result2.rows[0]
         } catch (err) {
             throw new Error(`Could not delete order ${id}. Error: ${err}`)
         }
