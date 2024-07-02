@@ -19,8 +19,8 @@ const show = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   const user: User = {
     id: 0,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    firstname: req.body.firstName,
+    lastname: req.body.lastName,
     password: req.body.password,
   };
   try {
@@ -53,8 +53,8 @@ const destroy = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
     const user: User = {
         id: parseInt(req.params.id),
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstname: req.body.firstName,
+        lastname: req.body.lastName,
         password: req.body.password
     }
 

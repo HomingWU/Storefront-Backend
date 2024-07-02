@@ -3,26 +3,34 @@ import {Product, ProductStore} from '../../models/product'
 const store = new ProductStore()
 
 describe('Product Model', () => {
-    beforeAll(() => {
-        store.create({
+    beforeAll(async() => {
+        await store.create({
             id: 1,
             name: 'test product1',
             price: 1,
             category: 'test category1'
         })
-        store.create({
+        await store.create({
             id: 2,
             name: 'test product2',
             price: 2,
             category: 'test category2'
         })
-        store.create({
+        await store.create({
             id: 3,
             name: 'test product3',
             price: 3,
             category: 'test category2'
         })
     })
+
+    afterAll(async() => {
+        await store.delete('2')
+        await store.delete('3')
+        await store.delete('4')
+        console.log("Product number after test: " + (await store.index()).length)
+    })
+
     it('should have an index method', () => {
         expect(store.index).toBeDefined()
     })

@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt'
 
 export type User = {
     id: number;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     password: string;
 }
 const saltRounds = process.env.SALT_ROUNDS as string
@@ -46,11 +46,12 @@ export class UserStore {
             const conn = await Client.connect()
             const sql = 'INSERT INTO users (firstName, lastName, password) VALUES($1, $2, $3) RETURNING *'
             const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds))
-            const result = await conn.query(sql, [u.firstName, u.lastName, hash])
+            const result = await conn.query(sql, [u.firstname, u.lastname, hash])
 
             conn.release()
 
             return result.rows[0]
+            
         } catch (err) {
             throw new Error(`Cannot create user: ${err}`)
         }
@@ -90,8 +91,8 @@ export class UserStore {
         try {
             const conn = await Client.connect()
             const sql = 'UPDATE users SET firstName = $1, lastName = $2, password = $3 WHERE id = $4 RETURNING *'
-
-            const result = await conn.query(sql, [u.firstName, u.lastName, u.password, u.id])
+            const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds))
+            const result = await conn.query(sql, [u.firstname, u.lastname, hash, u.id])
 
             conn.release()
 
