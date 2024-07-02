@@ -3,7 +3,7 @@ import app from "../../server";
 
 const request = supertest(app);
 
-describe("Test GET /orders", () => {
+describe("Test GET /users", () => {
   it("should return 200 OK", async () => {
     const response = await request.get("/orders");
     expect(response.status).toBe(200);
