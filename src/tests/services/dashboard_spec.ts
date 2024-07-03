@@ -1,5 +1,5 @@
 import { DashboardQueries } from "../../services/dashboard";
-import { Product, ProductStore } from "../../models/product";
+import { ProductStore } from "../../models/product";
 import { UserStore } from '../../models/user';
 import { OrderStore } from '../../models/order';
 import Client from "../../database";

@@ -1,4 +1,4 @@
-import {Product, ProductStore} from '../../models/product'
+import {ProductStore} from '../../models/product'
 import Client from '../../database'
 
 const store = new ProductStore()
