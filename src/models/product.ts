@@ -16,8 +16,8 @@ export class ProductStore {
             const result = await conn.query(sql)
 
             conn.release()
-            const products = result.rows.map((row: any) => {
-                row.price = parseFloat(row.price);
+            const products = result.rows.map((row: Product) => {
+                row.price = parseFloat(row.price as unknown as string);
                 return row;
             });
             return products
@@ -34,6 +34,7 @@ export class ProductStore {
             const result = await conn.query(sql, [id])
 
             conn.release()
+            result.rows[0].price = parseFloat(result.rows[0].price);
 
             return result.rows[0]
         } catch (err) {
@@ -49,8 +50,11 @@ export class ProductStore {
             const result = await conn.query(sql, [category])
 
             conn.release()
-
-            return result.rows
+            const products = result.rows.map((row: Product) => {
+                row.price = parseFloat(row.price as unknown as string);
+                return row;
+            });
+            return products
         } catch (err) {
             throw new Error(`Cannot get product: ${err}`)
         }
@@ -82,6 +86,7 @@ export class ProductStore {
             const result = await conn.query(sql, [id])
 
             conn.release()
+            result.rows[0].price = parseFloat(result.rows[0].price);
 
             return result.rows[0]
         } catch (err) {

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { User, UserStore } from '../models/user'
-import { verifyAuthToken, verifyUser, verifyUserInBody } from '../middleware/authMiddleware'
+import { verifyAuthToken, verifyUser } from '../middleware/authMiddleware'
 import jwt from 'jsonwebtoken'
 
 const store = new UserStore()
@@ -19,8 +19,8 @@ const show = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   const user: User = {
     id: 0,
-    firstname: req.body.firstName,
-    lastname: req.body.lastName,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
     password: req.body.password,
   };
   try {
@@ -35,7 +35,7 @@ const create = async (req: Request, res: Response) => {
 };
 
 const authenticate = async (req: Request, res: Response) => {
-    const user = await store.authenticate(req.body.firstName, req.body.lastName, req.body.password)
+    const user = await store.authenticate(req.body.firstname, req.body.lastname, req.body.password)
     if (user) {
         const token = jwt.sign({ user: user }, secret);
         res.json({token, user: user})
@@ -53,8 +53,8 @@ const destroy = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
     const user: User = {
         id: parseInt(req.params.id),
-        firstname: req.body.firstName,
-        lastname: req.body.lastName,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         password: req.body.password
     }
 

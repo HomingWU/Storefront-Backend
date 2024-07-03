@@ -44,7 +44,7 @@ export class UserStore {
     async create(u: User): Promise<User> {
         try {
             const conn = await Client.connect()
-            const sql = 'INSERT INTO users (firstName, lastName, password) VALUES($1, $2, $3) RETURNING *'
+            const sql = 'INSERT INTO users (firstname, lastname, password) VALUES($1, $2, $3) RETURNING *'
             const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds))
             const result = await conn.query(sql, [u.firstname, u.lastname, hash])
 
@@ -57,11 +57,11 @@ export class UserStore {
         }
     }
 
-    async authenticate(firstName: string, lastName: string, password: string): Promise<User | null> {
+    async authenticate(firstname: string, lastname: string, password: string): Promise<User | null> {
 
         const conn = await Client.connect()
-        const sql = 'SELECT * FROM users WHERE firstName=($1) AND lastName=($2)'
-        const result = await conn.query(sql, [firstName, lastName])
+        const sql = 'SELECT * FROM users WHERE firstname=($1) AND lastname=($2)'
+        const result = await conn.query(sql, [firstname, lastname])
 
         if (result.rows.length) {
             const user = result.rows[0]
@@ -90,7 +90,7 @@ export class UserStore {
     async update(u: User): Promise<User> {
         try {
             const conn = await Client.connect()
-            const sql = 'UPDATE users SET firstName = $1, lastName = $2, password = $3 WHERE id = $4 RETURNING *'
+            const sql = 'UPDATE users SET firstname = $1, lastname = $2, password = $3 WHERE id = $4 RETURNING *'
             const hash = bcrypt.hashSync(u.password + pepper, parseInt(saltRounds))
             const result = await conn.query(sql, [u.firstname, u.lastname, hash, u.id])
 
