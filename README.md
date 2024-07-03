@@ -15,7 +15,7 @@ The application makes use of the following libraries:
 - **bcrypt** from npm for encryption
 - **jasmine** from npm for testing
 
-## Steps to run the backend
+## Steps to Setup and Connect to the Database
 1. Create a `.env` file in the root folder to store environment variables :<br>
 ```
 # .env file content
@@ -24,6 +24,7 @@ POSTGRES_DB = store
 POSTGRES_TEST_DB = store_test
 POSTGRES_USER= store_admin
 POSTGRES_PASSWORD= password1234
+POSTGRES_PORT=5432
 ENV = dev
 BCRYPT_PASSWORD = Pikmin4GoodGame
 SALT_ROUNDS = 11
@@ -50,4 +51,10 @@ Follow the same step to grant schema of 'store_test' to store_admin: ```\c store
 ```npm install```
 8. Install and use db-migrate to do migration:<br>
 ```npm install -g db-migrate```<br>
-```db-migrate up```
+```db-migrate up``` <br><br>
+**The database will be running on the port `5432`.**
+
+##  Steps to Run the Backend ##
+1. Run the backend server: ```npm start```
+2. Run tests: ```npm test```<br><br>
+**The backend server will be running on the port `3000`.**

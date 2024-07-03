@@ -9,15 +9,17 @@ const{
   POSTGRES_TEST_DB,
   POSTGRES_USER,
   POSTGRES_PASSWORD,
+  POSTGRES_PORT,
   ENV
 } = process.env
 
 
-let client: Pool = new Pool({
+const client: Pool = new Pool({
   host: POSTGRES_HOST,
   database: ENV === 'test' ? POSTGRES_TEST_DB : POSTGRES_DB,
   user: POSTGRES_USER,
   password: POSTGRES_PASSWORD,
+  port: parseInt(POSTGRES_PORT as string),
 })
 console.log(ENV)
 
