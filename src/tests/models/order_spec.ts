@@ -1,8 +1,7 @@
-import {Order, OrderStore} from '../../models/order'
+import {OrderStore} from '../../models/order'
 import { ProductStore } from '../../models/product'
 import { UserStore } from '../../models/user'
 import Client  from '../../database'
-import e from 'express'
 
 const store = new OrderStore()
 const productStore = new ProductStore()
@@ -41,7 +40,7 @@ describe('Order Model', () => {
         })
         
         await store.create({
-            id: 1,
+            id: 2,
             user_id: 2,
             status: 'active'
         })
@@ -168,7 +167,12 @@ describe('Order Model', () => {
         expect(result.status).toEqual('complete')
     })
     it('delete method should remove the order', async() => {
-        const result = await store.delete('2')
+        const order = {
+            id: 2,
+            user_id: 2,
+            status: 'active'
+        }
+        const result = await store.delete(order)
         expect(result.id).toEqual(2)
         expect(result.user_id).toEqual(2)
         expect(result.status).toEqual('active')

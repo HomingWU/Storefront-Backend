@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const secret = process.env.TOKEN_SECRET as string;
 
@@ -20,7 +20,7 @@ export const verifyUser = async (req: Request, res: Response, next: NextFunction
     try {
         const authorizationHeader = req.headers.authorization as string
         const token = authorizationHeader.split(' ')[1]
-        const decoded: any = jwt.verify(token, secret)
+        const decoded = jwt.verify(token, secret) as JwtPayload
         const userId = parseInt(req.params.user_id)
         if(decoded.user.id !== userId){
             res.status(401)
@@ -39,7 +39,7 @@ export const verifyUserInBody = async (req: Request, res: Response, next: NextFu
     try {
         const authorizationHeader = req.headers.authorization as string
         const token = authorizationHeader.split(' ')[1]
-        const decoded: any = jwt.verify(token, secret)
+        const decoded = jwt.verify(token, secret) as JwtPayload
         const userId = parseInt(req.body.user_id)
         if(decoded.user.id !== userId){
             res.status(401)

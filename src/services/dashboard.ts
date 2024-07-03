@@ -14,6 +14,6 @@ export class DashboardQueries {
       return result.rows
     } catch (err) {
       throw new Error(`unable get products and orders: ${err}`)
-    } 
+    }
   }
 }

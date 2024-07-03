@@ -59,7 +59,18 @@ const update = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.params.id)
+    if (req.body.id !== parseInt(req.params.id)) {
+        console.log(req.body.id, req.params.id, typeof(req.body.id), typeof(req.params.id))
+        res.status(400)
+        res.json('Order ID in path does not match body')
+        return
+    }
+    const order: Order = {
+        id: parseInt(req.params.id),
+        user_id: req.body.user_id,
+        status: req.body.status
+    }
+    const deleted = await store.delete(order)
     res.json(deleted)
 }
 

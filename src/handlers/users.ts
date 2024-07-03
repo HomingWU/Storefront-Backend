@@ -46,13 +46,13 @@ const authenticate = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.params.id)
+    const deleted = await store.delete(req.params.user_id)
     res.json(deleted)
 }
 
 const update = async (req: Request, res: Response) => {
     const user: User = {
-        id: parseInt(req.params.id),
+        id: parseInt(req.params.user_id),
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         password: req.body.password
@@ -66,8 +66,8 @@ const user_routes = (app: express.Application) => {
     app.get('/users', verifyAuthToken, index)
     app.get('/users/:id', verifyAuthToken, show)
     app.post('/users', create)
-    app.delete('/users/:id', verifyUser, destroy)
-    app.put('/users/:id', verifyUser, update)
+    app.delete('/users/:user_id', verifyUser, destroy)
+    app.put('/users/:user_id', verifyUser, update)
     app.post('/users/authenticate', authenticate)
 }
 

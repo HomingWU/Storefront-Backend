@@ -22,8 +22,8 @@ export class OrderStore {
 
             conn.release()
 
-            const orders = result.rows.map((row: any) => {
-                row.user_id = parseInt(row.user_id);
+            const orders = result.rows.map((row: Order) => {
+                row.user_id = parseInt(row.user_id as unknown as string);
                 return row;
             });
 
@@ -113,7 +113,7 @@ export class OrderStore {
             const result = await conn.query(ordersql, [orderId])
 
             const order = result.rows[0]
-
+            conn.release()
             if (order.status !== "active") {
                 throw new Error(`Could not add product ${productId} to order ${orderId} because order status is ${order.status}`)
             }
@@ -121,8 +121,7 @@ export class OrderStore {
             if (order.user_id !== userId) {
                 throw new Error(`Could not add product ${productId} to order ${orderId} because order does not belong to user ${userId}`)
             }
-
-            conn.release()
+            
         } catch (err) {
             throw new Error(`${err}`)
         }
@@ -179,21 +178,35 @@ export class OrderStore {
         }
     }
 
-    async delete(id: string): Promise<Order> {
+    async delete(order : Order): Promise<Order> {
+        try {
+            const conn = await Client.connect()
+            const sql = 'SELECT * FROM orders WHERE id=($1)'
+            const result = await conn.query(sql, [order.id])
+            conn.release()
+            if (result.rows.length === 0) {
+                throw new Error(`Could not find order ${order.id}`)
+            } else if (parseInt(result.rows[0].user_id) !== order.user_id) {
+                throw new Error(`Could not delete order ${order.id} because it does not belong to user ${order.user_id}`)
+            }
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+
         try {
             const conn = await Client.connect()
             const sql1 = 'DELETE FROM order_products WHERE order_id=($1)'
             const sql2 = 'DELETE FROM orders WHERE id=($1) RETURNING *'
 
-            const result1 = await conn.query(sql1, [id])
-            const result2 = await conn.query(sql2, [id])
+            await conn.query(sql1, [order.id])
+            const result2 = await conn.query(sql2, [order.id])
 
             conn.release()
             result2.rows[0].user_id = parseInt(result2.rows[0].user_id)
 
             return result2.rows[0]
         } catch (err) {
-            throw new Error(`Could not delete order ${id}. Error: ${err}`)
+            throw new Error(`Could not delete order ${order.id}. Error: ${err}`)
         }
     }
 }

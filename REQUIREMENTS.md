@@ -5,29 +5,29 @@ The following is the endpoints the API supplys, as well as data shapes.
 #### Products
 - Index '/products' [GET]
 - Show (args: product id) '/products/:id' [GET]
-- Create [token required] '/products' [POST]
-- Delete (args: product id) [token required] '/products/:id' [DELETE]
-- Update (args: product id) [token required] '/products/:id' [PUT]
-- [OPTIONAL] Top 5 most popular products '/dashboard/top5products' [GET]
-- [OPTIONAL] Products by category (args: product category) '/products/category/:category' [GET]
+- Create [token required, Any] '/products' [POST]
+- Delete (args: product id) [token required, Any] '/products/:id' [DELETE]
+- Update (args: product id) [token required, Any] '/products/:id' [PUT]
+- Top 5 most popular products '/dashboard/top5products' [GET]
+- Products by category (args: product category) '/products/category/:category' [GET]
 
 #### Users
-- Index [token required] '/users' [GET]
-- Show (args: user id) [token required] '/users/:id' [GET]
+- Index [token required, Any] '/users' [GET]
+- Show (args: user id) [token required, Any] '/users/:id' [GET]
 - Create [token returned] '/users' [POST]
-- Delete (args: user id) [token required] '/users/:id' [DELETE]
-- Update (args: user id) [token required] '/users/:id' [PUT]
-- Authenticate [tokken returned]'/users/authenticate' [POST]
+- Delete (args: user id) [token required, matching the user id in the request parameter] '/users/:id' [DELETE]
+- Update (args: user id) [token required, matching the user id in the request parameter] '/users/:id' [PUT]
+- Authenticate [token returned] '/users/authenticate' [POST]
 
 #### Orders
-- Index [token required] '/orders' [GET]
-- Show (args: order id) [token required] '/orders/:id' [GET]
-- Create [token required] '/orders' [POST]
-- Update [token required] 'orders/:id' [PUT]
-- Delete (args: order id) [token required] '/orders/:id' [DELETE]
-- Current Order by user (args: user id)[token required] '/orders/active/:userId' [GET]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required] '/orders/complete/:userId' [GET]
-- Add Products (args: user id, order id)[token required] '/users/:userId/orders/:orderId/products' [POST]
+- Index [token required, Any] '/orders' [GET]
+- Show (args: order id) [token required, Any] '/orders/:id' [GET]
+- Create [token required, matching the user id in the request body] '/orders' [POST]
+- Update (args: order id)[token required, matching the user id in the request body] 'orders/:id' [PUT]
+- Delete (args: order id) [token required, matching the user id in the request body] '/orders/:id' [DELETE]
+- Current Order by user (args: user id)[token required, matching the user id in the request parameter] '/orders/active/:userId' [GET]
+- Completed Orders by user (args: user id)[token required, matching the user id in the request parameter] '/orders/complete/:userId' [GET]
+- Add Products (args: user id, order id) [token required, matching the user id in the request parameter] '/users/:userId/orders/:orderId/products' [POST]
 
 
 ## Data Shapes
